@@ -12,7 +12,14 @@ CANVAS_W = 700
 CANVAS_H = 380
 PAD = 30
 SNAP = 120  # real-pixel threshold for edge snapping
-COLORS = ["#5b9bd5", "#ed7d31", "#a9d18e", "#ffc000", "#9b59b6"]
+COLORS = ["#89b4fa", "#fab387", "#a6e3a1", "#f9e2af", "#cba6f7"]
+
+BG = "#1e1e2e"
+FG = "#cdd6f4"
+FG_DIM = "#6c7086"
+ACCENT = "#89b4fa"
+SURFACE = "#313244"
+FONT = "Hack Nerd Font"
 LOCK_FILE = Path("/tmp/display-gui.lock")
 
 
@@ -130,6 +137,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Display Positions")
+        self.configure(bg=BG)
         self.resizable(False, False)
 
         LOCK_FILE.write_text(str(os.getpid()))
@@ -143,23 +151,33 @@ class App(tk.Tk):
         self._drag_start_x = 0
         self._drag_start_y = 0
 
-        self.canvas = tk.Canvas(self, width=CANVAS_W, height=CANVAS_H, bg="#2b2b2b")
-        self.canvas.pack()
+        self.canvas = tk.Canvas(self, width=CANVAS_W, height=CANVAS_H, bg=SURFACE,
+                                highlightthickness=0)
+        self.canvas.pack(padx=8, pady=(8, 4))
 
-        preview_frame = tk.Frame(self, bg="#1e1e1e", pady=4)
+        preview_frame = tk.Frame(self, bg=BG, pady=4)
         preview_frame.pack(fill=tk.X)
         self.preview_var = tk.StringVar(value="")
         tk.Label(
             preview_frame, textvariable=self.preview_var,
-            font=("Monospace", 9), fg="#aaaaaa", bg="#1e1e1e",
-            anchor="w", justify="left", wraplength=CANVAS_W - 10, padx=6
+            font=(FONT, 9), fg=FG_DIM, bg=BG,
+            anchor="w", justify="left", wraplength=CANVAS_W - 10, padx=8
         ).pack(fill=tk.X)
 
-        btn_frame = tk.Frame(self, bg="#1e1e1e", pady=6)
+        btn_frame = tk.Frame(self, bg=BG, pady=6)
         btn_frame.pack(fill=tk.X)
-        tk.Button(btn_frame, text="Refresh", command=self.refresh, width=10).pack(side=tk.LEFT, padx=10)
-        tk.Button(btn_frame, text="Close", command=self.destroy, width=10).pack(side=tk.LEFT, padx=10)
-        tk.Button(btn_frame, text="Apply", command=self.apply, width=10).pack(side=tk.RIGHT, padx=10)
+        tk.Button(btn_frame, text="Refresh", command=self.refresh, width=10,
+                  bg=SURFACE, fg=FG, activebackground=ACCENT,
+                  activeforeground=BG, relief=tk.FLAT, bd=2,
+                  font=(FONT, 9)).pack(side=tk.LEFT, padx=10)
+        tk.Button(btn_frame, text="Close", command=self.destroy, width=10,
+                  bg=SURFACE, fg=FG, activebackground=ACCENT,
+                  activeforeground=BG, relief=tk.FLAT, bd=2,
+                  font=(FONT, 9)).pack(side=tk.LEFT, padx=10)
+        tk.Button(btn_frame, text="Apply", command=self.apply, width=10,
+                  bg=ACCENT, fg=BG, activebackground=FG,
+                  activeforeground=BG, relief=tk.FLAT, bd=2,
+                  font=(FONT, 9, "bold")).pack(side=tk.RIGHT, padx=10)
 
         self.canvas.bind("<ButtonPress-1>", self.on_press)
         self.canvas.bind("<B1-Motion>", self.on_drag)
