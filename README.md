@@ -26,6 +26,10 @@ A lightweight GUI for positioning monitors on X11 Linux, similar to Windows Disp
 | Debian/Ubuntu | `sudo apt install python3-tk` |
 | Fedora | `sudo dnf install python3-tkinter` |
 
+### Optional
+
+- [Hack Nerd Font](https://www.nerdfonts.com/) for best appearance (falls back to default font if not installed)
+
 ## Usage
 
 ```sh
